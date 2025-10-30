@@ -22,7 +22,7 @@ def inside(xy):
 def draw():
     "Draw ball and targets."
     clear()
-
+    
     for target in targets:
         goto(target.x, target.y)
         dot(20, 'blue')
@@ -41,9 +41,14 @@ def move():
         target = vector(200, y)
         targets.append(target)
 
-    # Aumentar la velocidad de los balones
+    # Aumentar la velocidad de los balones y reposicionar si salen
     for target in targets:
         target.x -= 1.0  # Cambiado de 0.5 a 1.0 (el doble de rápido)
+        
+        # Reposicionar balones que salen por la izquierda
+        if target.x < -200:
+            target.x = 200
+            target.y = randrange(-150, 150)
 
     if inside(ball):
         # Reducir la gravedad para que el proyectil sea más rápido
@@ -59,11 +64,7 @@ def move():
 
     draw()
 
-    # Aumentar la velocidad general del juego reduciendo el intervalo del timer
-    for target in targets:
-        if not inside(target):
-            return
-
+    # El juego nunca termina - eliminar la condición de retorno
     ontimer(move, 30)  # Cambiado de 50 a 30 (más frames por segundo)
 
 setup(420, 420, 370, 0)
